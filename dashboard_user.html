@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard User - Klinik Andalan Mu</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Plus Jakarta Sans', sans-serif; }
+        body {
+            background: radial-gradient(circle at top left, #dff4ff, #edf3ff 45%, #f8fbff 100%);
+            min-height: 100vh;
+        }
+        .topbar {
+            background: rgba(255,255,255,0.72);
+            border: 1px solid rgba(255,255,255,0.7);
+            box-shadow: 0 18px 40px rgba(37, 99, 235, 0.12);
+            backdrop-filter: blur(18px);
+        }
+        .hero-box {
+            background: linear-gradient(135deg, rgba(255,255,255,0.88), rgba(240,249,255,0.74));
+            border: 1px solid rgba(255,255,255,0.9);
+            box-shadow: 0 30px 60px rgba(37, 99, 235, 0.16);
+            border-radius: 30px;
+            padding: 42px;
+        }
+        .action-card {
+            border-radius: 24px;
+            padding: 24px;
+            color: white;
+            height: 100%;
+            box-shadow: 0 24px 45px rgba(15, 23, 42, 0.14);
+        }
+        .bg-doctor { background: linear-gradient(135deg, #2563eb, #38bdf8); }
+        .bg-ambulance { background: linear-gradient(135deg, #059669, #14b8a6); }
+        .bg-status { background: linear-gradient(135deg, #7c3aed, #a855f7); }
+        .btn-glow {
+            background: rgba(255,255,255,0.16);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.22);
+            border-radius: 16px;
+            padding: 12px 18px;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-glow:hover {
+            color: white;
+        }
+        .toast-area {
+            position: fixed;
+            top: 90px;
+            right: 20px;
+            z-index: 9999;
+            width: 360px;
+        }
+        .custom-toast {
+            display: flex;
+            gap: 12px;
+            padding: 14px 16px;
+            margin-bottom: 12px;
+            border-radius: 18px;
+            color: #fff;
+            box-shadow: 0 18px 36px rgba(0,0,0,0.16);
+            animation: slideInRight 0.45s ease;
+        }
+        .toast-success { background: linear-gradient(135deg, #16a34a, #22c55e); }
+        .toast-danger { background: linear-gradient(135deg, #dc2626, #ef4444); }
+        .toast-warning { background: linear-gradient(135deg, #d97706, #f59e0b); }
+        .toast-info { background: linear-gradient(135deg, #0284c7, #38bdf8); }
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(100%); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-4">
+        <nav class="navbar topbar rounded-4 px-4 py-3">
+            <a class="navbar-brand fw-bold fs-3 text-primary" href="#">Klinik Andalan Mu</a>
+            <div class="ms-auto d-flex gap-2">
+                <a href="/doctors" class="btn btn-light rounded-4 px-4">Lihat Dokter</a>
+                <a href="/logout" class="btn btn-danger rounded-4 px-4">Logout</a>
+            </div>
+        </nav>
+
+        <div class="toast-area">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="custom-toast toast-{{ category }}">
+                            <div>
+                                {% if category == 'success' %}
+                                    <i class="bi bi-check-circle-fill"></i>
+                                {% elif category == 'danger' %}
+                                    <i class="bi bi-x-circle-fill"></i>
+                                {% elif category == 'warning' %}
+                                    <i class="bi bi-exclamation-triangle-fill"></i>
+                                {% else %}
+                                    <i class="bi bi-info-circle-fill"></i>
+                                {% endif %}
+                            </div>
+                            <div>{{ message }}</div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+
+        <div class="hero-box mt-4">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <p class="text-uppercase fw-bold text-primary mb-2">Dashboard User</p>
+                    <h1 class="fw-bold mb-3">Halo, {{ session.full_name }}</h1>
+                    <p class="text-secondary mb-1">Email: {{ session.email }}</p>
+                    <p class="text-secondary mb-0">Role: {{ session.role }}</p>
+                </div>
+                <div class="col-lg-4 text-lg-end mt-4 mt-lg-0">
+                    <div class="display-3 text-primary opacity-75">
+                        <i class="bi bi-heart-pulse-fill"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4 mt-1">
+            <div class="col-md-4">
+                <div class="action-card bg-doctor">
+                    <h4 class="fw-bold">Konsul Dokter</h4>
+                    <p>Buat reservasi konsultasi dokter dengan tampilan yang rapi dan mudah dipakai.</p>
+                    <a href="/appointments" class="btn-glow">Buat Reservasi</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="action-card bg-ambulance">
+                    <h4 class="fw-bold">Ambulance</h4>
+                    <p>Ajukan booking ambulance cepat dengan jam 24 jam dan detail kondisi pasien.</p>
+                    <a href="/ambulance" class="btn-glow">Booking Ambulance</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="action-card bg-status">
+                    <h4 class="fw-bold">Cek Status</h4>
+                    <p>Lihat status reservasi dokter dan ambulance dalam satu halaman yang sama.</p>
+                    <a href="/status" class="btn-glow">Cek Status</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        setTimeout(() => {
+            document.querySelectorAll('.custom-toast').forEach((toast) => toast.remove());
+        }, 3500);
+    </script>
+</body>
+</html>

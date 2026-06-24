@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cek Status - Klinik Andalan Mu</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Plus Jakarta Sans', sans-serif; }
+        body {
+            background: radial-gradient(circle at top left, #ecfeff, #eef2ff 45%, #f8fafc 100%);
+            min-height: 100vh;
+        }
+        .topbar, .box-card {
+            background: rgba(255,255,255,0.78);
+            border: 1px solid rgba(255,255,255,0.8);
+            backdrop-filter: blur(18px);
+            box-shadow: 0 25px 55px rgba(15,23,42,0.10);
+            border-radius: 28px;
+        }
+        .box-card { padding: 30px; }
+        .badge-pending, .badge-approved, .badge-rejected, .badge-completed {
+            padding: 9px 14px;
+            border-radius: 999px;
+            font-weight: 700;
+            display: inline-block;
+        }
+        .badge-pending { background: linear-gradient(135deg, #f59e0b, #facc15); color: #222; }
+        .badge-approved { background: linear-gradient(135deg, #16a34a, #22c55e); color: white; }
+        .badge-rejected { background: linear-gradient(135deg, #dc2626, #ef4444); color: white; }
+        .badge-completed { background: linear-gradient(135deg, #7c3aed, #a855f7); color: white; }
+    </style>
+</head>
+<body>
+    <div class="container py-4">
+        <nav class="navbar topbar px-4 py-3">
+            <a class="navbar-brand fw-bold fs-3 text-primary" href="#">Klinik Andalan Mu</a>
+            <div class="ms-auto d-flex gap-2">
+                <a href="/dashboard-user" class="btn btn-light rounded-4 px-4">Dashboard</a>
+                <a href="/logout" class="btn btn-danger rounded-4 px-4">Logout</a>
+            </div>
+        </nav>
+
+        <div class="box-card mt-4">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
+                <div>
+                    <h2 class="fw-bold mb-1">Cek Status</h2>
+                    <p class="text-secondary mb-0">Pantau reservasi dokter dan booking ambulance dalam satu halaman.</p>
+                </div>
+            </div>
+
+            <h4 class="fw-bold text-primary mb-3">Status Reservasi Dokter</h4>
+            <div class="table-responsive mb-5">
+                <table class="table align-middle">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Dokter</th>
+                            <th>Spesialisasi</th>
+                            <th>Tanggal</th>
+                            <th>Jam</th>
+                            <th>Keluhan</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in appointment_status %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ item[1] }}</td>
+                            <td>{{ item[2] }}</td>
+                            <td>{{ item[3] }}</td>
+                            <td>{{ item[4] }}</td>
+                            <td>{{ item[5] }}</td>
+                            <td>
+                                {% if item[6] == 'pending' %}
+                                    <span class="badge-pending">Pending</span>
+                                {% elif item[6] == 'approved' %}
+                                    <span class="badge-approved">Approved</span>
+                                {% elif item[6] == 'rejected' %}
+                                    <span class="badge-rejected">Rejected</span>
+                                {% else %}
+                                    <span class="badge-completed">Completed</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        {% if appointment_status|length == 0 %}
+                        <tr>
+                            <td colspan="7" class="text-center text-secondary">Belum ada reservasi dokter.</td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+
+            <h4 class="fw-bold text-success mb-3">Status Booking Ambulance</h4>
+            <div class="table-responsive">
+                <table class="table align-middle">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Alamat Jemput</th>
+                            <th>Alamat Tujuan</th>
+                            <th>Tanggal</th>
+                            <th>Jam</th>
+                            <th>Kondisi Pasien</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in ambulance_status %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ item[1] }}</td>
+                            <td>{{ item[2] }}</td>
+                            <td>{{ item[3] }}</td>
+                            <td>{{ item[4] }}</td>
+                            <td>{{ item[5] }}</td>
+                            <td>
+                                {% if item[6] == 'pending' %}
+                                    <span class="badge-pending">Pending</span>
+                                {% elif item[6] == 'approved' %}
+                                    <span class="badge-approved">Approved</span>
+                                {% elif item[6] == 'rejected' %}
+                                    <span class="badge-rejected">Rejected</span>
+                                {% else %}
+                                    <span class="badge-completed">Completed</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        {% if ambulance_status|length == 0 %}
+                        <tr>
+                            <td colspan="7" class="text-center text-secondary">Belum ada booking ambulance.</td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
